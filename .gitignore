@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+
+# Tooling caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Project artifacts (never commit models or data)
+models/
+artifacts/
+data/
+*.onnx
+*.pt
+*.pth
+
+# Secrets and env
+.env
+*.pem
+.aws/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
