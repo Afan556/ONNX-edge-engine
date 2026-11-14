@@ -8,7 +8,16 @@ version = "0.1.0"
 description = "Convert, quantize, and benchmark PyTorch models with ONNX Runtime"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "numpy>=1.26",
+    "pillow>=10.0",
+    "torch>=2.3",
+    "torchvision>=0.18",
+    "transformers>=4.41",
+    "datasets>=2.19",
+    "onnx>=1.16",
+    "onnxruntime>=1.18",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -38,3 +47,8 @@ files = ["src", "tests"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=edgeopt --cov-report=term-missing --cov-fail-under=90"
+markers = ["integration: downloads real weights or datasets (needs network)"]
+
+[[tool.mypy.overrides]]
+module = ["torchvision.*", "transformers.*", "datasets.*", "onnx.*", "onnxruntime.*"]
+ignore_missing_imports = true
