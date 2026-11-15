@@ -8,7 +8,7 @@ from pathlib import Path
 
 from edgeopt.exceptions import ConfigError
 
-_VALID_LEVELS = frozenset(logging.getLevelNamesMapping()) - {"NOTSET"}
+_VALID_LEVELS = frozenset(logging._nameToLevel.keys())
 
 
 @dataclass(frozen=True)

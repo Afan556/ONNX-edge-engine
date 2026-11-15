@@ -52,7 +52,8 @@ def preprocess_image(img: Image.Image) -> NDArray:
     img = img.crop((left, top, left + 224, top + 224))
     arr = np.asarray(img, dtype=np.float32) / 255.0
     arr = (arr.transpose(2, 0, 1) - _MEAN) / _STD
-    return arr[np.newaxis].astype(np.float32)
+    result: NDArray = arr[np.newaxis].astype(np.float32)
+    return result
 
 
 def build_vision_dataset(
