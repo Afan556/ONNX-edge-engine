@@ -62,7 +62,7 @@ def _load_distilbert() -> nn.Module:
 
     # return_dict=False -> plain tuple outputs, which export cleanly to ONNX.
     model: nn.Module = AutoModelForSequenceClassification.from_pretrained(
-        REGISTRY["distilbert-sst2"].source, return_dict=False
+        REGISTRY["distilbert-sst2"].source, return_dict=False, attn_implementation="eager"
     )
     return model
 
