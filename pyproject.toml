@@ -17,6 +17,7 @@ dependencies = [
     "datasets>=2.19",
     "onnx>=1.16",
     "onnxruntime>=1.18",
+    "psutil>=5.9",
 ]
 
 [project.optional-dependencies]
@@ -50,7 +51,7 @@ addopts = "--cov=edgeopt --cov-report=term-missing --cov-fail-under=90"
 markers = ["integration: downloads real weights or datasets (needs network)"]
 
 [[tool.mypy.overrides]]
-module = ["torchvision.*", "transformers.*", "datasets.*", "onnx.*", "onnxruntime.*"]
+module = ["torchvision.*", "transformers.*", "datasets.*", "onnx.*", "onnxruntime.*", "psutil.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]

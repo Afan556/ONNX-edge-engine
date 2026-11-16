@@ -31,3 +31,7 @@ class QuantizationError(EdgeOptError):
 
 class InferenceError(EdgeOptError):
     """An ONNX Runtime session could not be created or run."""
+
+
+class BenchmarkError(EdgeOptError):
+    """A benchmark measurement or evaluation failed."""
