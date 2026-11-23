@@ -10,12 +10,13 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import numpy as np
-from edgeopt.worker import save_feed
+
 from edgeopt.data import EvalDataset, NDArray
 from edgeopt.exceptions import BenchmarkError
 from edgeopt.graph import file_size_mb
 from edgeopt.session import create_session
 from edgeopt.stats import Measurement
+from edgeopt.worker import save_feed
 
 logger = logging.getLogger(__name__)
 

@@ -5,15 +5,20 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from edgeopt.data import (
+from edgeopt import data
+from edgeopt.data import (  # add to the existing import list
     IMAGENETTE_TO_IMAGENET,
+    EvalDataset,
     build_text_dataset,
     build_vision_dataset,
+    load_calibration,
+    load_eval,
     load_text_dataset,
     load_vision_dataset,
     preprocess_image,
 )
 from edgeopt.exceptions import DatasetError
+from edgeopt.models import get_spec
 
 
 def _img() -> Image.Image:
@@ -94,3 +99,29 @@ def test_real_text_dataset() -> None:
     ds = load_text_dataset("validation", limit=8)
     assert len(ds) == 8
     assert all(y in (0, 1) for y in ds.labels)
+
+
+def test_calibration_and_eval_routing(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[tuple[str, str, int | None]] = []
+
+    def fake_vision(split: str, root: Path, limit: int | None = None, seed: int = 0) -> EvalDataset:
+        calls.append(("vision", split, limit))
+        return EvalDataset("v", [], [])
+
+    def fake_text(split: str, limit: int | None = None, seed: int = 0) -> EvalDataset:
+        calls.append(("nlp", split, limit))
+        return EvalDataset("t", [], [])
+
+    monkeypatch.setattr(data, "load_vision_dataset", fake_vision)
+    monkeypatch.setattr(data, "load_text_dataset", fake_text)
+    vision, nlp = get_spec("resnet18"), get_spec("distilbert-sst2")
+    load_calibration(vision, Path("d"))
+    load_calibration(nlp, Path("d"), samples=7)
+    load_eval(vision, Path("d"), limit=5)
+    load_eval(nlp, Path("d"))
+    assert calls == [
+        ("vision", "train", 100),
+        ("nlp", "train", 7),
+        ("vision", "val", 5),
+        ("nlp", "validation", None),
+    ]

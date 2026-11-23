@@ -1,0 +1,79 @@
+{
+  "model": "resnet18",
+  "dataset": "imagenette-val",
+  "n_eval_samples": 3925,
+  "threads": 1,
+  "warmup": 20,
+  "runs": 200,
+  "results": [
+    {
+      "name": "fp32",
+      "size_mb": 44.582892417907715,
+      "accuracy": 0.9773248407643312,
+      "measurement": {
+        "latency": {
+          "runs": 200,
+          "mean_ms": 37.7579305,
+          "std_ms": 1.014597909774976,
+          "min_ms": 36.8384,
+          "p50_ms": 37.428650000000005,
+          "p95_ms": 39.213675,
+          "p99_ms": 43.180640999999994,
+          "max_ms": 44.5599
+        },
+        "load_ms": 291.1707,
+        "baseline_rss_mb": 213.1953125,
+        "peak_rss_mb": 334.8515625
+      },
+      "speedup_vs_fp32": 1.0,
+      "size_reduction_pct": 0.0,
+      "accuracy_drop_pts": 0.0
+    },
+    {
+      "name": "fp32_opt",
+      "size_mb": 44.583022117614746,
+      "accuracy": 0.9773248407643312,
+      "measurement": {
+        "latency": {
+          "runs": 200,
+          "mean_ms": 38.426133,
+          "std_ms": 3.2957182629452717,
+          "min_ms": 36.9478,
+          "p50_ms": 37.5145,
+          "p95_ms": 42.35815,
+          "p99_ms": 53.96863199999991,
+          "max_ms": 67.3213
+        },
+        "load_ms": 130.1748,
+        "baseline_rss_mb": 212.91015625,
+        "peak_rss_mb": 334.15625
+      },
+      "speedup_vs_fp32": 0.9977115515334073,
+      "size_reduction_pct": -0.00029091810780368377,
+      "accuracy_drop_pts": 0.0
+    },
+    {
+      "name": "int8_static",
+      "size_mb": 11.274950981140137,
+      "accuracy": 0.9668789808917198,
+      "measurement": {
+        "latency": {
+          "runs": 200,
+          "mean_ms": 23.592824499999995,
+          "std_ms": 1.9468770077356583,
+          "min_ms": 22.8883,
+          "p50_ms": 23.3057,
+          "p95_ms": 24.449129999999997,
+          "p99_ms": 25.64232299999994,
+          "max_ms": 49.0919
+        },
+        "load_ms": 59.7428,
+        "baseline_rss_mb": 213.1484375,
+        "peak_rss_mb": 241.890625
+      },
+      "speedup_vs_fp32": 1.6059869473991342,
+      "size_reduction_pct": 74.71014021375764,
+      "accuracy_drop_pts": 1.0445859872611485
+    }
+  ]
+}

@@ -65,3 +65,12 @@ def test_static_unknown_calibration(
 def test_static_failure_wrapped(tmp_path: Path, cnn_feeds: list[dict[str, NDArray]]) -> None:
     with pytest.raises(QuantizationError):
         quantize_static_int8(tmp_path / "missing.onnx", tmp_path / "o.onnx", cnn_feeds)
+
+
+def test_static_op_type_restriction(
+    cnn_path: Path, tmp_path: Path, cnn_feeds: list[dict[str, NDArray]]
+) -> None:
+    out = quantize_static_int8(
+        cnn_path, tmp_path / "o.onnx", cnn_feeds, op_types_to_quantize=["Conv"]
+    )
+    assert "QuantizeLinear" in op_counts(out)

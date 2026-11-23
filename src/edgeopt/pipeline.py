@@ -14,7 +14,7 @@ from edgeopt.export import DEFAULT_OPSET, export_to_onnx
 from edgeopt.graph import file_size_mb, op_counts
 from edgeopt.models import ModelSpec, Task, example_inputs
 from edgeopt.optimize import optimize_graph
-from edgeopt.quantize import quantize_dynamic_int8, quantize_static_int8
+from edgeopt.quantize import Calibration, quantize_dynamic_int8, quantize_static_int8
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +47,8 @@ def build_variants(
     variants: Sequence[str] | None = None,
     inputs: tuple[torch.Tensor, ...] | None = None,
     opset: int = DEFAULT_OPSET,
+    calibration: Calibration = "minmax",
+    op_types: Sequence[str] | None = None,
 ) -> dict[str, BuiltVariant]:
     """Export fp32 (always), then derive each requested variant from that exported model."""
     requested = tuple(variants) if variants is not None else DEFAULT_VARIANTS[spec.task]
@@ -73,7 +75,9 @@ def build_variants(
         elif name == "int8_dynamic":
             quantize_dynamic_int8(fp32, target)
         else:
-            quantize_static_int8(fp32, target, calibration_feeds)
+            quantize_static_int8(
+                fp32, target, calibration_feeds, calibration, op_types_to_quantize=op_types
+            )
         paths[name] = target
     built = {name: _describe(name, path) for name, path in paths.items()}
     for v in built.values():

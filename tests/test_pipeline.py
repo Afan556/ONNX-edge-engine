@@ -29,3 +29,17 @@ def test_nlp_dynamic_variant(tmp_path: Path) -> None:
 def test_unknown_variant_rejected(tmp_path: Path) -> None:
     with pytest.raises(ConfigError, match="Unknown variants"):
         build_variants(NLP, TinyMatmul().eval(), [], tmp_path, variants=["int4"])
+
+
+def test_static_options_forwarded(tmp_path: Path, cnn_feeds: list[dict[str, NDArray]]) -> None:
+    built = build_variants(
+        VISION,
+        TinyCNN().eval(),
+        cnn_feeds,
+        tmp_path,
+        variants=["int8_static"],
+        inputs=cnn_inputs(),
+        calibration="percentile",
+        op_types=["Conv"],
+    )
+    assert set(built) == {"fp32", "int8_static"}

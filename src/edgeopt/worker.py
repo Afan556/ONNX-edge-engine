@@ -3,7 +3,7 @@
 Usage: python -m edgeopt.worker --model m.onnx --feed f.npz [--warmup N --runs N --threads N]
 Prints a single JSON object to stdout. Diagnostics go to stderr.
 """
-from typing import Any
+
 import argparse
 import json
 import sys
@@ -11,16 +11,18 @@ import time
 from collections.abc import Mapping, Sequence
 from dataclasses import asdict
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
-from edgeopt.data import NDArray
+from edgeopt.arraytypes import NDArray
 from edgeopt.exceptions import BenchmarkError, EdgeOptError
 from edgeopt.memory import peak_rss_mb
 from edgeopt.session import create_session
 from edgeopt.stats import Measurement, summarize_latencies
 
 _NS_PER_MS = 1e6
+
 
 def save_feed(path: Path, feed: Mapping[str, NDArray]) -> None:
     """Write a feed dict to an .npz file (the worker's input format)."""

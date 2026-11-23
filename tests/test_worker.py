@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -7,6 +9,11 @@ import pytest
 from edgeopt.data import NDArray
 from edgeopt.exceptions import BenchmarkError
 from edgeopt.worker import load_feed, main, measure, save_feed
+
+
+def test_worker_does_not_import_torch() -> None:
+    code = "import sys, edgeopt.worker; sys.exit(int('torch' in sys.modules))"
+    assert subprocess.run([sys.executable, "-c", code], check=False).returncode == 0
 
 
 def test_measure_returns_sane_numbers(cnn_path: Path, cnn_feeds: list[dict[str, NDArray]]) -> None:

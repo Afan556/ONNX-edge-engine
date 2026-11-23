@@ -27,7 +27,8 @@ dev = [
     "mypy>=1.10",
     "ruff>=0.5",
 ]
-
+[project.scripts]
+edgeopt = "edgeopt.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 

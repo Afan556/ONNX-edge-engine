@@ -8,15 +8,14 @@ from pathlib import Path
 from typing import Any, Literal
 
 import numpy as np
-import numpy.typing as npt
 from PIL import Image
 
+from edgeopt.arraytypes import NDArray as NDArray
 from edgeopt.exceptions import DatasetError
-from edgeopt.models import TEXT_MAX_LENGTH, get_spec
+from edgeopt.models import TEXT_MAX_LENGTH, ModelSpec, get_spec
 
 logger = logging.getLogger(__name__)
 
-NDArray = npt.NDArray[Any]
 
 # Imagenette's 10 classes (sorted by wnid) -> their indices in ImageNet-1k.
 IMAGENETTE_TO_IMAGENET: tuple[int, ...] = (0, 217, 482, 491, 497, 566, 569, 571, 574, 701)
@@ -134,3 +133,20 @@ def load_text_dataset(
     except Exception as exc:
         raise DatasetError(f"Failed to load SST-2: {exc}") from exc
     return build_text_dataset(raw, tokenizer, f"sst2-{split}", limit)
+
+
+DEFAULT_CALIBRATION_SAMPLES: dict[str, int] = {"vision": 100, "nlp": 128}
+
+
+def load_calibration(spec: ModelSpec, data_dir: Path, samples: int | None = None) -> EvalDataset:
+    """Calibration data always comes from the TRAIN split, never from evaluation data."""
+    n = samples if samples is not None else DEFAULT_CALIBRATION_SAMPLES[spec.task]
+    if spec.task == "vision":
+        return load_vision_dataset("train", data_dir, limit=n)
+    return load_text_dataset("train", limit=n)
+
+
+def load_eval(spec: ModelSpec, data_dir: Path, limit: int | None = None) -> EvalDataset:
+    if spec.task == "vision":
+        return load_vision_dataset("val", data_dir, limit=limit)
+    return load_text_dataset("validation", limit=limit)

@@ -70,6 +70,7 @@ def quantize_static_int8(
     calibration_feeds: Sequence[Mapping[str, NDArray]],
     calibration: Calibration = "minmax",
     per_channel: bool = True,
+    op_types_to_quantize: Sequence[str] | None = None,
 ) -> Path:
     """QDQ static quantization. Calibration feeds must come from the TRAIN split, never eval."""
     if calibration not in _CALIBRATION:
@@ -92,6 +93,9 @@ def quantize_static_int8(
                 weight_type=QuantType.QInt8,
                 activation_type=QuantType.QUInt8,
                 calibrate_method=_CALIBRATION[calibration],
+                op_types_to_quantize=None
+                if op_types_to_quantize is None
+                else list(op_types_to_quantize),
             )
     except Exception as exc:
         raise QuantizationError(f"Static quantization failed: {exc}") from exc
