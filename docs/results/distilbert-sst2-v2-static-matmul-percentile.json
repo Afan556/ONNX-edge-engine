@@ -1,0 +1,56 @@
+{
+  "model": "distilbert-sst2",
+  "dataset": "sst2-validation",
+  "n_eval_samples": 300,
+  "threads": 1,
+  "warmup": 20,
+  "runs": 50,
+  "results": [
+    {
+      "name": "fp32",
+      "size_mb": 255.48080444335938,
+      "accuracy": 0.8966666666666666,
+      "measurement": {
+        "latency": {
+          "runs": 50,
+          "mean_ms": 137.380432,
+          "std_ms": 3.3892052769603684,
+          "min_ms": 133.2974,
+          "p50_ms": 136.5195,
+          "p95_ms": 143.086665,
+          "p99_ms": 146.34672799999998,
+          "max_ms": 149.0382
+        },
+        "load_ms": 412.9432,
+        "baseline_rss_mb": 48.46875,
+        "peak_rss_mb": 399.40625
+      },
+      "speedup_vs_fp32": 1.0,
+      "size_reduction_pct": 0.0,
+      "accuracy_drop_pts": 0.0
+    },
+    {
+      "name": "int8_static",
+      "size_mb": 214.0302505493164,
+      "accuracy": 0.8533333333333334,
+      "measurement": {
+        "latency": {
+          "runs": 50,
+          "mean_ms": 124.92813399999999,
+          "std_ms": 4.339321453757949,
+          "min_ms": 122.2169,
+          "p50_ms": 123.33565,
+          "p95_ms": 130.795775,
+          "p99_ms": 141.01171999999997,
+          "max_ms": 148.8282
+        },
+        "load_ms": 365.9433,
+        "baseline_rss_mb": 48.56640625,
+        "peak_rss_mb": 359.41796875
+      },
+      "speedup_vs_fp32": 1.1068940732059223,
+      "size_reduction_pct": 16.224527703502144,
+      "accuracy_drop_pts": 4.333333333333322
+    }
+  ]
+}
